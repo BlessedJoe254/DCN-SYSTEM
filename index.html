@@ -9,26 +9,41 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
   <link rel="stylesheet" href="styles.css" />
+
   <style>
+    /* ====== Base Layout ====== */
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f5fa;
+      margin: 0;
+      padding: 0;
+    }
+
     select[multiple] {
       height: 100px;
       padding: 6px;
     }
+
     label {
       font-weight: 600;
       margin-top: 8px;
-    }
-    .form-grid input, .form-grid select {
-      width: 100%;
+      display: block;
     }
 
-    /* Compact Dashboard Layout */
+    .form-grid input,
+    .form-grid select {
+      width: 100%;
+      margin-bottom: 8px;
+      padding: 8px;
+    }
+
     .tiles {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
       gap: 0.6rem;
       margin-top: 0.5rem;
     }
+
     .tile {
       background: #fff;
       border-radius: 10px;
@@ -37,36 +52,41 @@
       text-align: center;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
+
     .tile:hover {
       transform: scale(1.03);
       box-shadow: 0 2px 8px rgba(0,0,0,0.12);
     }
+
     .tile i {
       font-size: 1.6rem;
       color: #005b96;
       margin-bottom: 4px;
       display: block;
     }
+
     .tile div {
       font-size: 0.9rem;
       color: #333;
       margin-bottom: 2px;
     }
+
     .tile strong {
       font-size: 1rem;
       color: #111;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 1rem;
     }
 
     .logo img {
       width: 50px;
       height: 50px;
       object-fit: contain;
-      margin-right: 8px;
-    }
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 8px;
     }
 
     h4.section-title {
@@ -83,32 +103,124 @@
       align-items: center;
       margin-bottom: 10px;
     }
+
     .main-header h2 {
       font-size: 1.2rem;
       display: flex;
       align-items: center;
       gap: 6px;
     }
+
     .alert {
       margin-bottom: 10px;
       font-size: 0.9rem;
       display: flex;
       align-items: center;
       gap: 6px;
+      background: #e8f5e9;
+      padding: 8px;
+      border-radius: 6px;
     }
+
     .alert i {
       color: green;
+    }
+
+    .logout-btn {
+      background: #d9534f;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+
+    .logout-btn:hover {
+      background: #c9302c;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+      border-radius: 6px;
+      overflow: hidden;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    th {
+      background: #f4f4f4;
+      font-weight: 600;
+    }
+
+    tr:hover {
+      background: #f9f9f9;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    #add-member-btn {
+      background: #005b96;
+      color: #fff;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    #add-member-btn:hover {
+      background: #004478;
+    }
+
+    #save-member {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 8px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    #save-member:hover {
+      background: #218838;
     }
 
     @media (max-width: 768px) {
       .tiles {
         grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
       }
+
+      .sidebar {
+        width: 100%;
+        display: flex;
+        overflow-x: auto;
+      }
+
+      nav a {
+        white-space: nowrap;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="app">
+    <!-- ====== Sidebar ====== -->
     <aside class="sidebar">
       <div class="logo">
         <img src="logo.png" alt="Deliverance Church Nchiru" />
@@ -123,118 +235,63 @@
       </nav>
     </aside>
 
+    <!-- ====== Main Content ====== -->
     <main class="main">
       <header class="main-header">
         <h2 id="page-title"><i class="bi bi-church"></i> Dashboard</h2>
-        <div class="date" id="today"></div>
+        <div class="right-header">
+          <span id="logged-user"></span>
+          <button class="logout-btn" id="logout-btn"><i class="bi bi-box-arrow-right"></i> Logout</button>
+        </div>
       </header>
 
       <section id="content">
-
         <!-- ✅ Dashboard -->
         <div id="dashboard-page" class="page">
-          <div class="alert success" id="login-message">
+          <div class="alert" id="login-message">
             <i class="bi bi-check-circle-fill"></i>
-            Success! You are now logged in as <strong id="logged-user">Ezekiel Mukiibi</strong>.
+            Success! You are now logged in as <strong id="logged-user-name">User</strong>.
           </div>
 
-          <!-- Overall Stats -->
           <div class="tiles">
-            <div class="tile">
-              <i class="bi bi-people-fill"></i>
-              <div>Total Members</div>
-              <strong id="total-members">0</strong>
-            </div>
-            <div class="tile">
-              <i class="bi bi-gender-male"></i>
-              <div>Total Male</div>
-              <strong id="total-male">0</strong>
-            </div>
-            <div class="tile">
-              <i class="bi bi-gender-female"></i>
-              <div>Total Female</div>
-              <strong id="total-female">0</strong>
-            </div>
+            <div class="tile"><i class="bi bi-people-fill"></i><div>Total Members</div><strong id="total-members">0</strong></div>
+            <div class="tile"><i class="bi bi-gender-male"></i><div>Total Male</div><strong id="total-male">0</strong></div>
+            <div class="tile"><i class="bi bi-gender-female"></i><div>Total Female</div><strong id="total-female">0</strong></div>
           </div>
 
-          <!-- ✅ Ministries Summary -->
           <h4 class="section-title"><i class="bi bi-music-note-beamed"></i> Ministries Overview</h4>
-          <div class="tiles" id="ministries-summary">
-            <div class="tile">
-              <i class="bi bi-mic-fill"></i>
-              <div>Praise & Worship</div>
-              <strong id="ministry-praise">0</strong>
-            </div>
-            <div class="tile">
-              <i class="bi bi-door-open-fill"></i>
-              <div>Ushering</div>
-              <strong id="ministry-ushering">0</strong>
-            </div>
-            <div class="tile">
-              <i class="bi bi-camera-video-fill"></i>
-              <div>Media</div>
-              <strong id="ministry-media">0</strong>
-            </div>
-            <div class="tile">
-              <i class="bi bi-house-door-fill"></i>
-              <div>House Keeping</div>
-              <strong id="ministry-housekeeping">0</strong>
-            </div>
-            <div class="tile">
-              <i class="bi bi-cup-hot-fill"></i>
-              <div>Hospitality</div>
-              <strong id="ministry-hospitality">0</strong>
-            </div>
+          <div class="tiles">
+            <div class="tile"><i class="bi bi-mic-fill"></i><div>Praise & Worship</div><strong id="ministry-praise">0</strong></div>
+            <div class="tile"><i class="bi bi-door-open-fill"></i><div>Ushering</div><strong id="ministry-ushering">0</strong></div>
+            <div class="tile"><i class="bi bi-camera-video-fill"></i><div>Media</div><strong id="ministry-media">0</strong></div>
+            <div class="tile"><i class="bi bi-house-door-fill"></i><div>House Keeping</div><strong id="ministry-housekeeping">0</strong></div>
+            <div class="tile"><i class="bi bi-cup-hot-fill"></i><div>Hospitality</div><strong id="ministry-hospitality">0</strong></div>
           </div>
 
-          <!-- ✅ Departments Summary -->
           <h4 class="section-title"><i class="bi bi-collection-fill"></i> Departments Overview</h4>
-          <div class="tiles" id="departments-summary">
-            <div class="tile">
-              <i class="bi bi-lightning-fill"></i>
-              <div>Kingdom Generation</div>
-              <strong id="dept-kg">0</strong>
-            </div>
-            <div class="tile">
-              <i class="bi bi-book-fill"></i>
-              <div>Teenagers</div>
-              <strong id="dept-teenagers">0</strong>
-            </div>
-            <div class="tile">
-              <i class="bi bi-fire"></i>
-              <div>Vijanaz</div>
-              <strong id="dept-vijanaz">0</strong>
-            </div>
-            <div class="tile">
-              <i class="bi bi-person-hearts"></i>
-              <div>Women</div>
-              <strong id="dept-women">0</strong>
-            </div>
-            <div class="tile">
-              <i class="bi bi-person-lines-fill"></i>
-              <div>Men</div>
-              <strong id="dept-men">0</strong>
-            </div>
+          <div class="tiles">
+            <div class="tile"><i class="bi bi-lightning-fill"></i><div>Kingdom Generation</div><strong id="dept-kg">0</strong></div>
+            <div class="tile"><i class="bi bi-book-fill"></i><div>Teenagers</div><strong id="dept-teenagers">0</strong></div>
+            <div class="tile"><i class="bi bi-fire"></i><div>Vijanaz</div><strong id="dept-vijanaz">0</strong></div>
+            <div class="tile"><i class="bi bi-person-hearts"></i><div>Women</div><strong id="dept-women">0</strong></div>
+            <div class="tile"><i class="bi bi-person-lines-fill"></i><div>Men</div><strong id="dept-men">0</strong></div>
           </div>
         </div>
 
         <!-- ✅ Members Page -->
         <div id="members-page" class="page hidden">
           <h3>Members <button id="add-member-btn"><i class="bi bi-person-plus-fill"></i> Add Member</button></h3>
-
           <div id="member-form" class="hidden form-grid">
             <input id="m-first" placeholder="First Name" required />
             <input id="m-last" placeholder="Last Name" />
             <input id="m-phone" placeholder="Phone Number" required />
-
             <select id="m-gender" required>
               <option value="">Gender</option>
               <option value="Male">Male</option>
               <option value="Female">Female</option>
             </select>
-
             <label for="m-ministry">Select Ministry (You can choose multiple):</label>
-            <select id="m-ministry" multiple required>
+            <select id="m-ministry" multiple>
               <option value="Praise and Worship">Praise and Worship</option>
               <option value="Ushering">Ushering</option>
               <option value="Media">Media</option>
@@ -242,9 +299,8 @@
               <option value="Hospitality">Hospitality</option>
               <option value="Nil">Nil</option>
             </select>
-
             <label for="m-department">Select Department:</label>
-            <select id="m-department" required>
+            <select id="m-department">
               <option value="">Select Department</option>
               <option value="Kingdom Generation">Kingdom Generation</option>
               <option value="Teenagers">Teenagers</option>
@@ -252,25 +308,14 @@
               <option value="Women">Women</option>
               <option value="Men">Men</option>
             </select>
-
             <input id="m-home" placeholder="Home Location" />
-            <input id="m-joined" type="date" />
-
             <button id="save-member"><i class="bi bi-save2-fill"></i> Save Member</button>
           </div>
-
           <table id="members-table">
             <thead>
               <tr>
-                <th>#</th>
-                <th>Name</th>
-                <th>Phone</th>
-                <th>Gender</th>
-                <th>Ministry</th>
-                <th>Department</th>
-                <th>Home</th>
-                <th>Date Joined</th>
-                <th>Action</th>
+                <th>#</th><th>Name</th><th>Phone</th><th>Gender</th><th>Ministry</th>
+                <th>Department</th><th>Home</th><th>Date Joined</th><th>Action</th>
               </tr>
             </thead>
             <tbody></tbody>
@@ -287,11 +332,10 @@
             <button id="save-contrib"><i class="bi bi-plus-circle"></i> Add</button>
           </div>
           <table id="contrib-table">
-            <thead>
-              <tr><th>#</th><th>Member</th><th>Amount</th><th>Date</th></tr>
-            </thead>
+            <thead><tr><th>#</th><th>Member</th><th>Amount</th><th>Date</th></tr></thead>
             <tbody></tbody>
           </table>
+          <p><strong>Total Contributions:</strong> <span id="total-contributions">KES 0.00</span></p>
         </div>
 
         <!-- ✅ Expenses Page -->
@@ -303,17 +347,110 @@
             <button id="save-expense"><i class="bi bi-plus-circle"></i> Add</button>
           </div>
           <table id="expense-table">
-            <thead>
-              <tr><th>#</th><th>Title</th><th>Amount</th><th>Date</th></tr>
-            </thead>
+            <thead><tr><th>#</th><th>Title</th><th>Amount</th><th>Date</th></tr></thead>
             <tbody></tbody>
           </table>
+          <p><strong>Total Expenses:</strong> <span id="total-expenses">KES 0.00</span></p>
         </div>
-
       </section>
     </main>
   </div>
 
-  <script src="app.js"></script>
+  <script>
+    // ✅ Handle Authentication
+    const user = JSON.parse(localStorage.getItem('user'));
+    if (!user) {
+      alert('You must log in first.');
+      window.location.href = 'login.html';
+    }
+    document.getElementById('logged-user').textContent = user?.username || 'User';
+    document.getElementById('logged-user-name').textContent = user?.username || 'User';
+
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      localStorage.removeItem('user');
+      alert('You have been logged out.');
+      window.location.href = 'login.html';
+    });
+
+    // ✅ Navigation between pages
+    document.querySelectorAll('nav a').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+        document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+        link.classList.add('active');
+        document.getElementById(`${link.dataset.page}-page`).classList.remove('hidden');
+        document.getElementById('page-title').innerHTML = `<i class="${link.querySelector('i').className}"></i> ${link.textContent.trim()}`;
+      });
+    });
+
+    // ✅ Member Management
+    const addMemberBtn = document.getElementById('add-member-btn');
+    const memberForm = document.getElementById('member-form');
+    const saveMemberBtn = document.getElementById('save-member');
+    const membersTableBody = document.querySelector('#members-table tbody');
+
+    let members = JSON.parse(localStorage.getItem('members')) || [];
+
+    function renderMembers() {
+      membersTableBody.innerHTML = '';
+      members.forEach((m, i) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td>${i + 1}</td>
+          <td>${m.first} ${m.last}</td>
+          <td>${m.phone}</td>
+          <td>${m.gender}</td>
+          <td>${m.ministry.join(', ')}</td>
+          <td>${m.department}</td>
+          <td>${m.home}</td>
+          <td>${m.date}</td>
+          <td><button onclick="deleteMember(${i})" style="color:red;border:none;background:none;cursor:pointer;"><i class='bi bi-trash'></i></button></td>
+        `;
+        membersTableBody.appendChild(row);
+      });
+      document.getElementById('total-members').textContent = members.length;
+    }
+
+    window.deleteMember = (i) => {
+      if (confirm('Are you sure you want to delete this member?')) {
+        members.splice(i, 1);
+        localStorage.setItem('members', JSON.stringify(members));
+        renderMembers();
+      }
+    };
+
+    addMemberBtn.addEventListener('click', () => {
+      memberForm.classList.toggle('hidden');
+    });
+
+    saveMemberBtn.addEventListener('click', () => {
+      const first = document.getElementById('m-first').value.trim();
+      const last = document.getElementById('m-last').value.trim();
+      const phone = document.getElementById('m-phone').value.trim();
+      const gender = document.getElementById('m-gender').value;
+      const ministry = Array.from(document.getElementById('m-ministry').selectedOptions).map(o => o.value);
+      const department = document.getElementById('m-department').value;
+      const home = document.getElementById('m-home').value.trim();
+
+      if (!first || !phone || !gender) {
+        alert('Please fill in all required fields.');
+        return;
+      }
+
+      const member = {
+        first, last, phone, gender, ministry, department, home,
+        date: new Date().toLocaleDateString()
+      };
+
+      members.push(member);
+      localStorage.setItem('members', JSON.stringify(members));
+      renderMembers();
+      memberForm.reset();
+      memberForm.classList.add('hidden');
+    });
+
+    renderMembers();
+  </script>
 </body>
 </html>

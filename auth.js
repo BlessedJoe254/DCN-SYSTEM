@@ -5,13 +5,13 @@ const router = express.Router();
 
 // Register
 router.post('/register', async (req, res) => {
-  const { name, password, adminCode } = req.body;
+  const { username, password, adminCode } = req.body;
 
-  if (!name || !password)
-    return res.status(400).json({ error: 'Name and password are required.' });
+  if (!username || !password)
+    return res.status(400).json({ error: 'Username and password are required.' });
 
   try {
-    const [existing] = await req.db.execute('SELECT id FROM users WHERE name=?', [name]);
+    const [existing] = await req.db.execute('SELECT id FROM users WHERE username=?', [username]);
     if (existing.length)
       return res.status(400).json({ error: 'User already exists.' });
 
@@ -22,7 +22,7 @@ router.post('/register', async (req, res) => {
     }
 
     const hashed = await bcrypt.hash(password, 10);
-    await req.db.execute('INSERT INTO users (name, password, role) VALUES (?,?,?)', [name, hashed, role]);
+    await req.db.execute('INSERT INTO users (username, password, role) VALUES (?,?,?)', [username, hashed, role]);
 
     res.json({ message: 'Registration successful!' });
   } catch (err) {
@@ -33,12 +33,12 @@ router.post('/register', async (req, res) => {
 
 // Login
 router.post('/login', async (req, res) => {
-  const { name, password } = req.body;
-  if (!name || !password)
-    return res.status(400).json({ error: 'Name and password are required.' });
+  const { username, password } = req.body;
+  if (!username || !password)
+    return res.status(400).json({ error: 'Username and password are required.' });
 
   try {
-    const [rows] = await req.db.execute('SELECT * FROM users WHERE name=?', [name]);
+    const [rows] = await req.db.execute('SELECT * FROM users WHERE username=?', [username]);
     if (!rows.length) return res.status(400).json({ error: 'User not found.' });
 
     const user = rows[0];
@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
 
     res.json({
       message: 'Login successful!',
-      user: { id: user.id, name: user.name, role: user.role },
+      user: { id: user.id, username: user.username, role: user.role },
     });
   } catch (err) {
     console.error(err);

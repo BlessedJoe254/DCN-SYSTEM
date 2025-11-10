@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - Deliverance Church Admin</title>
+  <title>Register - Deliverance Church Admin</title>
   <link rel="stylesheet" href="styles.css">
   <style>
     body {
@@ -71,46 +71,46 @@
 </head>
 <body>
   <div class="auth-box">
-    <h2>Login</h2>
+    <h2>Register</h2>
     <div id="error" class="error"></div>
     <input type="text" id="username" placeholder="Username" required>
     <input type="password" id="password" placeholder="Password" required>
-    <button id="login-btn">Login</button>
+    <input type="text" id="adminCode" placeholder="Admin Code (optional)">
+    <button id="register-btn">Register</button>
     <div class="link">
-      Don’t have an account? <a href="register.html">Register</a>
+      Already have an account? <a href="login.html">Login</a>
     </div>
   </div>
 
   <script>
-    const apiBase = 'http://localhost:4000/api'; // ✅ Connects to your backend
+    const apiBase = 'http://localhost:4000/api'; // ✅ Your backend base URL
 
-    document.getElementById('login-btn').addEventListener('click', async () => {
+    document.getElementById('register-btn').addEventListener('click', async () => {
       const username = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value.trim();
+      const adminCode = document.getElementById('adminCode').value.trim();
       const errorDiv = document.getElementById('error');
       errorDiv.textContent = '';
 
       if (!username || !password) {
-        errorDiv.textContent = 'Please enter both username and password.';
+        errorDiv.textContent = 'Username and password are required.';
         return;
       }
 
       try {
-        const res = await fetch(`${apiBase}/auth/login`, {
+        const res = await fetch(`${apiBase}/auth/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ username, password })
+          body: JSON.stringify({ username, password, adminCode })
         });
 
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Login failed.');
+        if (!res.ok) throw new Error(data.error || 'Registration failed.');
 
-        // ✅ Save user info locally
-        localStorage.setItem('user', JSON.stringify(data.user));
-        alert('✅ Login successful!');
-        window.location.href = 'index.html'; // Redirect to your dashboard
+        alert('✅ Registration successful! You can now log in.');
+        window.location.href = 'login.html';
       } catch (err) {
-        console.error('Login failed:', err);
+        console.error('Registration failed:', err);
         errorDiv.textContent = err.message || 'Something went wrong.';
       }
     });
