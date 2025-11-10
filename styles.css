@@ -1,0 +1,284 @@
+:root {
+  --purple: #3A0CA3;
+  --red: #E53935;
+  --bg: #FAFBFF;
+  --muted: #6B7280;
+  --text: #111827;
+  --light: #f6f7fb;
+  --green: #16a34a;
+  --orange: #f59e0b;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Inter", "Segoe UI", Roboto, Arial;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+/* --- Layout --- */
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 280px;
+  background: #fff;
+  border-right: 1px solid #e6e9f0;
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo img {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  object-fit: cover;
+}
+
+.logo h1 {
+  font-size: 18px;
+  margin: 0;
+  color: var(--purple);
+}
+
+.logo small {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.sidebar nav a {
+  display: block;
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: var(--purple);
+  text-decoration: none;
+  margin-bottom: 6px;
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.sidebar nav a:hover {
+  background: rgba(58, 12, 163, 0.08);
+}
+
+.sidebar nav a.active {
+  background: linear-gradient(90deg, var(--purple), #5B2DCC);
+  color: white;
+}
+
+/* --- Main Area --- */
+.main {
+  flex: 1;
+  padding: 28px;
+  overflow-y: auto;
+}
+
+.main-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.alert.success {
+  background: linear-gradient(90deg, var(--purple), var(--red));
+  color: white;
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 18px;
+  font-weight: 600;
+}
+
+.tiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+
+.tile {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #eef1fb;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.tile:hover {
+  transform: translateY(-3px);
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* --- Tables --- */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+table thead {
+  background: var(--light);
+}
+
+table th,
+table td {
+  padding: 10px;
+  border-bottom: 1px solid #eef1fb;
+  text-align: left;
+  font-size: 14px;
+}
+
+table tbody tr:hover {
+  background: #f9f9fe;
+}
+
+/* --- Buttons --- */
+button {
+  background: transparent;
+  border: 2px solid var(--purple);
+  color: var(--purple);
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+button:hover {
+  background: var(--purple);
+  color: white;
+}
+
+/* Action buttons */
+.btn-edit {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+
+.btn-edit:hover {
+  background: var(--orange);
+  color: white;
+}
+
+.btn-delete {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+.btn-delete:hover {
+  background: var(--red);
+  color: white;
+}
+
+/* Group action buttons neatly */
+td .action-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+/* --- Inputs and Selects --- */
+input,
+select {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #d7dbea;
+  font-size: 14px;
+  width: 100%;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--purple);
+  box-shadow: 0 0 4px rgba(58, 12, 163, 0.4);
+}
+
+/* Multi-select styling */
+select[multiple] {
+  height: 120px;
+  background: #fafbff;
+  cursor: pointer;
+}
+
+/* --- Member Form Grid --- */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 10px;
+  margin: 15px 0;
+  background: white;
+  padding: 15px;
+  border: 1px solid #eef1fb;
+  border-radius: 10px;
+}
+
+#member-form button {
+  grid-column: span 2;
+  background-color: var(--purple);
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+#member-form button:hover {
+  background-color: #2b008e;
+}
+
+/* Label improvements */
+label {
+  font-weight: 600;
+  font-size: 14px;
+  margin-top: 4px;
+  color: var(--text);
+}
+
+/* --- Responsive --- */
+@media (max-width: 768px) {
+  .app {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    border-right: none;
+    border-bottom: 1px solid #e6e9f0;
+  }
+
+  .logo h1 {
+    display: none;
+  }
+
+  .main {
+    padding: 16px;
+  }
+
+  td .action-buttons {
+    flex-direction: column;
+    gap: 4px;
+  }
+}

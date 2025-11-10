@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Deliverance Church Login</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <style>
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: #f5f7fa;
+      font-family: Arial, sans-serif;
+    }
+    .login-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      width: 320px;
+    }
+    h2 {
+      text-align: center;
+      color: #005b96;
+      margin-bottom: 1rem;
+    }
+    input, button, select {
+      width: 100%;
+      padding: 0.6rem;
+      margin-bottom: 0.8rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      background: #005b96;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+    }
+    button:hover {
+      background: #00457a;
+    }
+    .toggle {
+      text-align: center;
+      color: #005b96;
+      cursor: pointer;
+    }
+    .error, .success {
+      text-align: center;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+    .error { color: red; }
+    .success { color: green; }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2><i class="bi bi-church"></i> Deliverance Church</h2>
+    <div id="msg"></div>
+
+    <input id="name" placeholder="Name" />
+    <input id="password" type="password" placeholder="Password" />
+    <input id="adminCode" placeholder="Admin Code (if registering admin)" class="hidden" />
+
+    <button id="loginBtn">Login</button>
+    <button id="registerBtn" class="hidden">Register</button>
+    <div class="toggle" id="toggle">Create new account</div>
+  </div>
+
+  <script>
+    const api = "http://localhost:4000/api/auth";
+    const msg = document.getElementById('msg');
+    const toggle = document.getElementById('toggle');
+    const nameInput = document.getElementById('name');
+    const passwordInput = document.getElementById('password');
+    const adminCodeInput = document.getElementById('adminCode');
+    const loginBtn = document.getElementById('loginBtn');
+    const registerBtn = document.getElementById('registerBtn');
+    let isRegister = false;
+
+    toggle.onclick = () => {
+      isRegister = !isRegister;
+      adminCodeInput.classList.toggle('hidden', !isRegister);
+      loginBtn.classList.toggle('hidden', isRegister);
+      registerBtn.classList.toggle('hidden', !isRegister);
+      toggle.textContent = isRegister ? "Already have an account? Login" : "Create new account";
+      msg.innerHTML = "";
+    };
+
+    async function handleLogin() {
+      const name = nameInput.value.trim();
+      const password = passwordInput.value.trim();
+      if (!name || !password) return showMsg("Please fill all fields", true);
+      const res = await fetch(api + "/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, password })
+      });
+      const data = await res.json();
+      if (!res.ok) return showMsg(data.error, true);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      showMsg("Login successful!", false);
+      setTimeout(() => (window.location = "index.html"), 1000);
+    }
+
+    async function handleRegister() {
+      const name = nameInput.value.trim();
+      const password = passwordInput.value.trim();
+      const adminCode = adminCodeInput.value.trim() || null;
+      if (!name || !password) return showMsg("Please fill all fields", true);
+      const res = await fetch(api + "/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, password, adminCode })
+      });
+      const data = await res.json();
+      if (!res.ok) return showMsg(data.error, true);
+      showMsg("Registration successful! You can now log in.", false);
+      toggle.click(); // switch to login view
+    }
+
+    loginBtn.onclick = handleLogin;
+    registerBtn.onclick = handleRegister;
+
+    function showMsg(text, isError) {
+      msg.innerHTML = `<div class="${isError ? 'error' : 'success'}">${text}</div>`;
+    }
+  </script>
+</body>
+</html>

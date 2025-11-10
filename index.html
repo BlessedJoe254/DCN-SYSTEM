@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Deliverance Church Admin - Nchiru</title>
+
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    select[multiple] {
+      height: 100px;
+      padding: 6px;
+    }
+    label {
+      font-weight: 600;
+      margin-top: 8px;
+    }
+    .form-grid input, .form-grid select {
+      width: 100%;
+    }
+
+    /* Compact Dashboard Layout */
+    .tiles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 0.6rem;
+      margin-top: 0.5rem;
+    }
+    .tile {
+      background: #fff;
+      border-radius: 10px;
+      padding: 12px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+      text-align: center;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .tile:hover {
+      transform: scale(1.03);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    .tile i {
+      font-size: 1.6rem;
+      color: #005b96;
+      margin-bottom: 4px;
+      display: block;
+    }
+    .tile div {
+      font-size: 0.9rem;
+      color: #333;
+      margin-bottom: 2px;
+    }
+    .tile strong {
+      font-size: 1rem;
+      color: #111;
+    }
+
+    .logo img {
+      width: 50px;
+      height: 50px;
+      object-fit: contain;
+      margin-right: 8px;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h4.section-title {
+      margin-top: 18px;
+      font-size: 1rem;
+      color: #333;
+      border-bottom: 2px solid #eee;
+      padding-bottom: 4px;
+    }
+
+    .main-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .main-header h2 {
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .alert {
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .alert i {
+      color: green;
+    }
+
+    @media (max-width: 768px) {
+      .tiles {
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="logo">
+        <img src="logo.png" alt="Deliverance Church Nchiru" />
+        <h1>Deliverance Church<br><small>Nchiru</small></h1>
+      </div>
+
+      <nav>
+        <a class="active" href="#" data-page="dashboard"><i class="bi bi-speedometer2"></i> Dashboard</a>
+        <a href="#" data-page="members"><i class="bi bi-people-fill"></i> Members</a>
+        <a href="#" data-page="contributions"><i class="bi bi-heart-fill"></i> Contributions</a>
+        <a href="#" data-page="expenses"><i class="bi bi-cash-stack"></i> Expenses</a>
+      </nav>
+    </aside>
+
+    <main class="main">
+      <header class="main-header">
+        <h2 id="page-title"><i class="bi bi-church"></i> Dashboard</h2>
+        <div class="date" id="today"></div>
+      </header>
+
+      <section id="content">
+
+        <!-- ✅ Dashboard -->
+        <div id="dashboard-page" class="page">
+          <div class="alert success" id="login-message">
+            <i class="bi bi-check-circle-fill"></i>
+            Success! You are now logged in as <strong id="logged-user">Ezekiel Mukiibi</strong>.
+          </div>
+
+          <!-- Overall Stats -->
+          <div class="tiles">
+            <div class="tile">
+              <i class="bi bi-people-fill"></i>
+              <div>Total Members</div>
+              <strong id="total-members">0</strong>
+            </div>
+            <div class="tile">
+              <i class="bi bi-gender-male"></i>
+              <div>Total Male</div>
+              <strong id="total-male">0</strong>
+            </div>
+            <div class="tile">
+              <i class="bi bi-gender-female"></i>
+              <div>Total Female</div>
+              <strong id="total-female">0</strong>
+            </div>
+          </div>
+
+          <!-- ✅ Ministries Summary -->
+          <h4 class="section-title"><i class="bi bi-music-note-beamed"></i> Ministries Overview</h4>
+          <div class="tiles" id="ministries-summary">
+            <div class="tile">
+              <i class="bi bi-mic-fill"></i>
+              <div>Praise & Worship</div>
+              <strong id="ministry-praise">0</strong>
+            </div>
+            <div class="tile">
+              <i class="bi bi-door-open-fill"></i>
+              <div>Ushering</div>
+              <strong id="ministry-ushering">0</strong>
+            </div>
+            <div class="tile">
+              <i class="bi bi-camera-video-fill"></i>
+              <div>Media</div>
+              <strong id="ministry-media">0</strong>
+            </div>
+            <div class="tile">
+              <i class="bi bi-house-door-fill"></i>
+              <div>House Keeping</div>
+              <strong id="ministry-housekeeping">0</strong>
+            </div>
+            <div class="tile">
+              <i class="bi bi-cup-hot-fill"></i>
+              <div>Hospitality</div>
+              <strong id="ministry-hospitality">0</strong>
+            </div>
+          </div>
+
+          <!-- ✅ Departments Summary -->
+          <h4 class="section-title"><i class="bi bi-collection-fill"></i> Departments Overview</h4>
+          <div class="tiles" id="departments-summary">
+            <div class="tile">
+              <i class="bi bi-lightning-fill"></i>
+              <div>Kingdom Generation</div>
+              <strong id="dept-kg">0</strong>
+            </div>
+            <div class="tile">
+              <i class="bi bi-book-fill"></i>
+              <div>Teenagers</div>
+              <strong id="dept-teenagers">0</strong>
+            </div>
+            <div class="tile">
+              <i class="bi bi-fire"></i>
+              <div>Vijanaz</div>
+              <strong id="dept-vijanaz">0</strong>
+            </div>
+            <div class="tile">
+              <i class="bi bi-person-hearts"></i>
+              <div>Women</div>
+              <strong id="dept-women">0</strong>
+            </div>
+            <div class="tile">
+              <i class="bi bi-person-lines-fill"></i>
+              <div>Men</div>
+              <strong id="dept-men">0</strong>
+            </div>
+          </div>
+        </div>
+
+        <!-- ✅ Members Page -->
+        <div id="members-page" class="page hidden">
+          <h3>Members <button id="add-member-btn"><i class="bi bi-person-plus-fill"></i> Add Member</button></h3>
+
+          <div id="member-form" class="hidden form-grid">
+            <input id="m-first" placeholder="First Name" required />
+            <input id="m-last" placeholder="Last Name" />
+            <input id="m-phone" placeholder="Phone Number" required />
+
+            <select id="m-gender" required>
+              <option value="">Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+            </select>
+
+            <label for="m-ministry">Select Ministry (You can choose multiple):</label>
+            <select id="m-ministry" multiple required>
+              <option value="Praise and Worship">Praise and Worship</option>
+              <option value="Ushering">Ushering</option>
+              <option value="Media">Media</option>
+              <option value="House Keeping">House Keeping</option>
+              <option value="Hospitality">Hospitality</option>
+              <option value="Nil">Nil</option>
+            </select>
+
+            <label for="m-department">Select Department:</label>
+            <select id="m-department" required>
+              <option value="">Select Department</option>
+              <option value="Kingdom Generation">Kingdom Generation</option>
+              <option value="Teenagers">Teenagers</option>
+              <option value="Vijanaz">Vijanaz</option>
+              <option value="Women">Women</option>
+              <option value="Men">Men</option>
+            </select>
+
+            <input id="m-home" placeholder="Home Location" />
+            <input id="m-joined" type="date" />
+
+            <button id="save-member"><i class="bi bi-save2-fill"></i> Save Member</button>
+          </div>
+
+          <table id="members-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Gender</th>
+                <th>Ministry</th>
+                <th>Department</th>
+                <th>Home</th>
+                <th>Date Joined</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <!-- ✅ Contributions Page -->
+        <div id="contributions-page" class="page hidden">
+          <h3><i class="bi bi-heart-fill"></i> Contributions</h3>
+          <div id="contrib-form">
+            <select id="contrib-member"></select>
+            <input id="contrib-amount" placeholder="Amount" />
+            <input id="contrib-method" placeholder="Method" />
+            <button id="save-contrib"><i class="bi bi-plus-circle"></i> Add</button>
+          </div>
+          <table id="contrib-table">
+            <thead>
+              <tr><th>#</th><th>Member</th><th>Amount</th><th>Date</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+        <!-- ✅ Expenses Page -->
+        <div id="expenses-page" class="page hidden">
+          <h3><i class="bi bi-cash-stack"></i> Expenses</h3>
+          <div>
+            <input id="expense-title" placeholder="Title" />
+            <input id="expense-amount" placeholder="Amount" />
+            <button id="save-expense"><i class="bi bi-plus-circle"></i> Add</button>
+          </div>
+          <table id="expense-table">
+            <thead>
+              <tr><th>#</th><th>Title</th><th>Amount</th><th>Date</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
